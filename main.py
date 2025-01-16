@@ -1,6 +1,7 @@
 # this allows us to use code from
 # the open-source pygame library
 # throughout this file
+import sys
 import pygame
 import constants
 import player
@@ -19,7 +20,7 @@ def main():
     player.Player.containers = (updatable, drawable)
     asteroid.Asteroid.containers = (updatable, drawable, asteroids)
     asteroidfield.AsteroidField.containers = (updatable,)
-    player.Player(constants.SCREEN_WIDTH/2, constants.SCREEN_HEIGHT/2)
+    player_obj = player.Player(constants.SCREEN_WIDTH/2, constants.SCREEN_HEIGHT/2)
     asteroidfield.AsteroidField()
     while True:
         for event in pygame.event.get():
@@ -28,6 +29,10 @@ def main():
         screen.fill((0, 0, 0))
         for obj in updatable:
             obj.update(dt)
+        for asteroid_obj in asteroids:
+            if asteroid_obj.collides_with(player_obj):
+                print("Game over!")
+                sys.exit()
         for obj in drawable:
             obj.draw(screen)
         pygame.display.flip()
